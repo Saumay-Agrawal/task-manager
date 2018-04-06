@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Flask Task Manager</title>
+</head>
+<body>
+    <h1>TASK MANAGER</h1>
+    
+    <h2>Memory</h2>
+        <h3>Virtual Memory</h3>
+        {% for key in vm %}
+        <p>{{ key }} - {{ vm[key] }}</p>
+        {% endfor %}
+        <h3>Swap Memory</h3>
+        {% for key in sm %}
+        <p>{{ key }} - {{ m[key] }}</p>
+        {% endfor %}
+    <hr>
+
+    <h2>Process</h2>
+    <table>
+        {% for p in procs %}
+        <tr>
+            <td>{{p['pid']}}</td>
+            <td>{{p['name']}}</td>
+            <td>{{p['username']}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+
+</body>
+</html>
