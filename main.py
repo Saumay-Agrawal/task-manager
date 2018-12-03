@@ -13,10 +13,17 @@ def gettimef(time):
 def getnumf(x, p):
     return round(x, p) if x!=None else 0
 
+def secs2hours(secs):
+    mm, ss = divmod(secs, 60)
+    hh, mm = divmod(mm, 60)
+    return "%d:%02d:%02d" % (hh, mm, ss)
+
 @app.route('/')
 def index():
     
     cputimes = psutil.cpu_times()._asdict()
+    for i in cputimes:
+        cputimes[i] = secs2hours(cputimes[i])
     cpustats = psutil.cpu_stats()._asdict()
     
     users = []
@@ -37,7 +44,7 @@ def index():
     vm = psutil.virtual_memory()._asdict()
     for key in vm:
         if key!='percent':
-            vm[key] = str(round(vm[key]/1000000,2)) + 'M'
+            vm[key] = str(round(vm[key]/1000000,2)) + ' M'
 
     sm = psutil.swap_memory()._asdict()
     for key in sm:
@@ -48,39 +55,6 @@ def index():
     boottime = gettimef(psutil.boot_time())
 
     return render_template('index.html', cputimes=cputimes, cpustats=cpustats, procs=processes, vm=vm, sm=sm, users=users, host=host, boottime=boottime)
-
-
-# @app.route('/menu', methods=['POST'])
-# def menu():
-#     print(request.form['inputColName'])
-#     return render_template('menu.html', data=request.form)
-#
-#
-# @app.route('/geodata')
-# def geodata():
-#     client = MongoClient()
-#     db = client["Tweets"]
-#     delhi_collection = db["Delhi"]
-#     delhi_tweets = delhi_collection.find()
-#     data = []
-#     for tweet in delhi_tweets:
-#         data.append(tweet['geo'])
-#     return render_template('geodata.html', data=data)
-#
-# @app.route('/coordinates')
-# def coordinates():
-#     client = MongoClient()
-#     db = client["Tweets"]
-#     delhi_collection = db["Delhi"]
-#     delhi_tweets = delhi_collection.find()
-#     data = []
-#     for tweet in delhi_tweets:
-#         data.append(tweet['coordinates'])
-#     return render_template('coordinates.html', data=data)
-
-
-# if __name__ == '__main__':
-#     app.run()
 
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
